@@ -177,6 +177,243 @@ public class MainActivity extends AppCompatActivity implements ActivityCompat.On
 
 
         });
+
+        mButtonB=(Button)findViewById(R.id.btnB);
+        mButtonB.setOnTouchListener(new Button.OnTouchListener(){
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+// TODO Auto-generated method stub
+                String message;
+                byte[] msgBuffer;
+                int action = event.getAction();
+                switch(action)
+                {
+                    case MotionEvent.ACTION_DOWN:  //按下了前进按钮
+                        try {
+                            outStream = btSocket.getOutputStream();  //通过socket 得到输出流
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Output stream creation failed.", e);
+                        }
+
+
+                        message = "$2,0,0,0,0,0,0,0,0,0,0,0,4200#";  //上位机与下位机约定的指令
+
+                        msgBuffer = message.getBytes();  //因为outputStream 只能传输字节，所以要把字符串指令编程字节流
+
+                        try {
+                            outStream.write(msgBuffer);  //将指令写入输出流中。也就是写入socket中
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Exception during write.", e);
+                        }
+                        break;
+
+                    case MotionEvent.ACTION_UP:  //松开了前进按钮，与前面类似，只是指令不同。
+                        try {
+                            outStream = btSocket.getOutputStream();
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Output stream creation failed.", e);
+                        }
+
+
+                        message = "$0,0,0,0,0,0,0,0,0,0,0,0,4200#";
+
+                        msgBuffer = message.getBytes();
+
+                        try {
+                            outStream.write(msgBuffer);
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Exception during write.", e);
+                        }
+                        break;
+                }
+                return false;
+            }
+
+
+        });
+
+        mButtonL=(Button)findViewById(R.id.btnL);
+        mButtonL.setOnTouchListener(new Button.OnTouchListener(){
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+// TODO Auto-generated method stub
+                String message;
+                byte[] msgBuffer;
+                int action = event.getAction();
+                switch(action)
+                {
+                    case MotionEvent.ACTION_DOWN:  //按下了前进按钮
+                        try {
+                            outStream = btSocket.getOutputStream();  //通过socket 得到输出流
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Output stream creation failed.", e);
+                        }
+
+
+                        message = "$3,0,0,0,0,0,0,0,0,0,0,0,4200#";  //上位机与下位机约定的指令
+
+                        msgBuffer = message.getBytes();  //因为outputStream 只能传输字节，所以要把字符串指令编程字节流
+
+                        try {
+                            outStream.write(msgBuffer);  //将指令写入输出流中。也就是写入socket中
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Exception during write.", e);
+                        }
+                        break;
+
+                    case MotionEvent.ACTION_UP:  //松开了前进按钮，与前面类似，只是指令不同。
+                        try {
+                            outStream = btSocket.getOutputStream();
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Output stream creation failed.", e);
+                        }
+
+
+                        message = "$0,0,0,0,0,0,0,0,0,0,0,0,4200#";
+
+                        msgBuffer = message.getBytes();
+
+                        try {
+                            outStream.write(msgBuffer);
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Exception during write.", e);
+                        }
+                        break;
+                }
+                return false;
+            }
+
+
+        });
+
+        mButtonR=(Button)findViewById(R.id.btnR);
+        mButtonR.setOnTouchListener(new Button.OnTouchListener(){
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+// TODO Auto-generated method stub
+                String message;
+                byte[] msgBuffer;
+                int action = event.getAction();
+                switch(action)
+                {
+                    case MotionEvent.ACTION_DOWN:  //按下了前进按钮
+                        try {
+                            outStream = btSocket.getOutputStream();  //通过socket 得到输出流
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Output stream creation failed.", e);
+                        }
+
+
+                        message = "$4,0,0,0,0,0,0,0,0,0,0,0,4200#";  //上位机与下位机约定的指令
+
+                        msgBuffer = message.getBytes();  //因为outputStream 只能传输字节，所以要把字符串指令编程字节流
+
+                        try {
+                            outStream.write(msgBuffer);  //将指令写入输出流中。也就是写入socket中
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Exception during write.", e);
+                        }
+                        break;
+
+                    case MotionEvent.ACTION_UP:  //松开了前进按钮，与前面类似，只是指令不同。
+                        try {
+                            outStream = btSocket.getOutputStream();
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Output stream creation failed.", e);
+                        }
+
+
+                        message = "$0,0,0,0,0,0,0,0,0,0,0,0,4200#";
+
+                        msgBuffer = message.getBytes();
+
+                        try {
+                            outStream.write(msgBuffer);
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Exception during write.", e);
+                        }
+                        break;
+                }
+                return false;
+            }
+
+
+        });
+
+        mButtonS=(Button)findViewById(R.id.btnS);
+        mButtonS.setOnTouchListener(new Button.OnTouchListener(){
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+// TODO Auto-generated method stub
+                String message;
+                byte[] msgBuffer;
+                int action = event.getAction();
+                switch(action)
+                {
+                    case MotionEvent.ACTION_DOWN:  //按下了前进按钮
+                        try {
+                            outStream = btSocket.getOutputStream();  //通过socket 得到输出流
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Output stream creation failed.", e);
+                        }
+
+
+                        message = "$0,0,0,0,0,0,0,0,0,0,0,0,4200#";  //上位机与下位机约定的指令
+
+                        msgBuffer = message.getBytes();  //因为outputStream 只能传输字节，所以要把字符串指令编程字节流
+
+                        try {
+                            outStream.write(msgBuffer);  //将指令写入输出流中。也就是写入socket中
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Exception during write.", e);
+                        }
+                        break;
+
+                    case MotionEvent.ACTION_UP:  //松开了前进按钮，与前面类似，只是指令不同。
+                        try {
+                            outStream = btSocket.getOutputStream();
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Output stream creation failed.", e);
+                        }
+
+
+                        message = "$0,0,0,0,0,0,0,0,0,0,0,0,4200#";
+
+                        msgBuffer = message.getBytes();
+
+                        try {
+                            outStream.write(msgBuffer);
+
+                        } catch (IOException e) {
+                            Log.e("tag", "ON RESUME: Exception during write.", e);
+                        }
+                        break;
+                }
+                return false;
+            }
+
+
+        });
+
         mButtonConnect=(Button)findViewById(R.id.connect);
         mButtonConnect.setOnClickListener(new Button.OnClickListener() {
             @Override
