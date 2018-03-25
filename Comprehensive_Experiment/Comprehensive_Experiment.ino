@@ -474,19 +474,32 @@ void BeepOnOffMode()
 
 //巡线模式
 void track()
-{
+{ 
+  
   //有信号为LOW  没有信号为HIGH
   SR = digitalRead(SensorRight);//有信号表明在白色区域，车子底板上L3亮；没信号表明压在黑线上，车子底板上L3灭
   SL = digitalRead(SensorLeft);//有信号表明在白色区域，车子底板上L2亮；没信号表明压在黑线上，车子底板上L2灭
 
-  if (SL == LOW && SR == LOW) //当两边RPR220同时检测不到黑线
-    g_carstate = enRUN;   //调用前进函数
+  Distance_test();
+  if((Distance < 25))//如果距离小于x
+  {
+    delay(10);
+    Distance_test();
+    while(Distance < 25){
+      whistle();
+      brake();//停车
+      delay(300);
+      Distance_test();//测量前方距离
+    }
+  }
+  else if (SL == LOW && SR == LOW) //当两边RPR220同时检测白色
+    g_carstate = enSTOP;   //调用停止函数
   else if (SL == LOW & SR == HIGH)// 左循迹红外传感器,检测到信号，车子向右偏离轨道，向左转
     g_carstate = enRIGHT;
   else if (SR == LOW & SL ==  HIGH) // 右循迹红外传感器,检测到信号，车子向左偏离轨道，向右转
     g_carstate = enLEFT;
-  else // 双探头都是检测到了黑线的情况下, 停止
-    g_carstate = enSTOP;
+  else // 双探头都是检测到了黑线的情况下, 前进
+    g_carstate = enRUN;
 }
 //超声波避障
 void ultrason_obstacle_avoiding()
@@ -546,8 +559,8 @@ void loop()
     switch (g_modeSelect)
     {
       case 1: track(); break; //巡线模式
-      case 2: ultrason_obstacle_avoiding(); break;
-      case 3: Infrared_follow(); break;
+      case 2: ultrason_obstacle_avoiding(); break; //避障
+      case 3: Infrared_follow(); break; //跟随
     }
   }
   CarControl();
