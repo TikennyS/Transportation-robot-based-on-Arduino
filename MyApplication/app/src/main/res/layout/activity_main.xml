@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout
+    android:id="@+id/widget0"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnNormal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="控制模式" />
+
+        <Button
+            android:id="@+id/btnTrack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="巡线模式" />
+
+        <Button
+            android:id="@+id/btnFollow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="跟随模式" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnF"
+        android:layout_width="100px"
+        android:layout_height="100px"
+        android:text="↑"
+        android:textSize="20dp"
+        android:layout_x="130px"
+        android:layout_y="262px"
+        >
+    </Button>
+    <Button
+        android:id="@+id/btnL"
+        android:layout_width="100px"
+        android:layout_height="100px"
+        android:text="←"
+        android:textSize="20dp"
+        android:layout_x="20px"
+        android:layout_y="352px"
+        >
+    </Button>
+    <Button
+        android:id="@+id/btnR"
+        android:layout_width="100px"
+        android:layout_height="100px"
+        android:text="→"
+        android:textSize="20dp"
+        android:layout_x="240px"
+        android:layout_y="352px"
+        >
+    </Button>
+    <Button
+        android:id="@+id/btnB"
+        android:layout_width="100px"
+        android:layout_height="100px"
+        android:text="↓"
+        android:textSize="20dp"
+        android:layout_x="130px"
+        android:layout_y="442px"
+        >
+    </Button>
+    <Button
+        android:id="@+id/btnS"
+        android:layout_width="100px"
+        android:layout_height="100px"
+        android:text="●"
+        android:textSize="20dp"
+        android:layout_x="130px"
+        android:layout_y="352px"
+        >
+    </Button>
+</AbsoluteLayout>
