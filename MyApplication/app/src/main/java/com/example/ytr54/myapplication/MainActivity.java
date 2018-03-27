@@ -1,10 +1,11 @@
 package com.example.ytr54.myapplication;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothSocket btSocket = null;  //手机蓝牙与蓝牙模块之间的socket
 
     private OutputStream outStream = null;  //发送指令的输出流
+    private InputStream inputStream= null;  //发送指令的输出流
     Button mButtonF;
 
     Button mButtonB;
@@ -40,10 +43,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     private static String address = "98:D3:31:FC:A6:B9"; // <==要连接的蓝牙设备MAC地址
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //解析
+
+
 
         //前进
         mButtonF=(Button)findViewById(R.id.btnF);
@@ -76,6 +83,21 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             Log.e(TAG, "ON RESUME: Exception during write.", e);
                         }
+                        byte[] msgBufferReceive = new byte[50];
+                        int bytes = 0;
+                        String receivemessage;
+                        try {
+                            inputStream=btSocket.getInputStream();
+                            bytes=inputStream.read(msgBufferReceive);
+                            receivemessage=new String(msgBufferReceive,0,bytes,"UTF8");
+                            if(receivemessage.indexOf("c")>=2)
+                            {
+                                receivemessage=receivemessage.substring(receivemessage.indexOf("c")-2,receivemessage.indexOf("c"));
+                                Log.e("接收的数据",receivemessage);
+                            }
+                        } catch (IOException e) {
+                            Log.e(TAG, "ON RESUME: Input stream Read failed.", e);
+                        }
                         break;
 
                     case MotionEvent.ACTION_UP:  //松开了前进按钮，与前面类似，只是指令不同。
@@ -97,8 +119,22 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             Log.e(TAG, "ON RESUME: Exception during write.", e);
                         }
+                        msgBufferReceive = new byte[50];
+                        try {
+                            inputStream=btSocket.getInputStream();
+                            bytes=inputStream.read(msgBufferReceive);
+                            receivemessage=new String(msgBufferReceive,0,bytes,"UTF8");
+                            if(receivemessage.indexOf("c")>=2)
+                            {
+                                receivemessage=receivemessage.substring(receivemessage.indexOf("c")-2,receivemessage.indexOf("c"));
+                                Log.e("接收的数据",receivemessage);
+                            }
+                        } catch (IOException e) {
+                            Log.e(TAG, "ON RESUME: Input stream Read failed.", e);
+                        }
                         break;
                 }
+
                 return false;
             }
 
@@ -381,6 +417,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         if (D)
             Log.e(TAG, "+++ ON CREATE +++");
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -438,6 +475,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "ON RESUME: Socket creation failed.", e);
 
         }
+
         mBluetoothAdapter.cancelDiscovery();
         try {
 
