@@ -268,31 +268,31 @@ void Bluetooth(void)
     {
       switch (inputString[1])
       {
-        case run_car:   g_carstate = enRUN; Serial.print("run\r\n"); break;
-        case back_car:  g_carstate = enBACK;  Serial.print("back\r\n"); break;
-        case left_car:  g_carstate = enLEFT; Serial.print("left\r\n"); break;
-        case right_car: g_carstate = enRIGHT; Serial.print("right\r\n"); break;
-        case stop_car:  g_carstate = enSTOP; Serial.print("brake\r\n"); break;
+        case run_car:   g_carstate = enRUN;  break;
+        case back_car:  g_carstate = enBACK;  break;
+        case left_car:  g_carstate = enLEFT;  break;
+        case right_car: g_carstate = enRIGHT; break;
+        case stop_car:  g_carstate = enSTOP;  break;
         default: g_carstate = enSTOP; break;
       }
       if (inputString[3] == '1') //旋转
       {
         spin_left();
-        Serial.print("revolve\r\n");
+        //Serial.print("revolve\r\n");
         delay(2000);//延时2ms
         brake();
       }
       else if (inputString[3] == '2') //旋转
       {
         spin_right();
-        Serial.print("revolve\r\n");
+        //Serial.print("revolve\r\n");
         delay(2000);//延时2ms
         brake();
       }
       if (inputString[5] == '1') //鸣笛
       {
         whistle();
-        Serial.print("whistle\r\n");
+       // Serial.print("whistle\r\n");
       }
       if (inputString[7] == '1') //加速
       {
@@ -301,7 +301,7 @@ void Bluetooth(void)
         {
           control = 255;
         }
-        Serial.print("expedite\r\n");
+        //Serial.print("expedite\r\n");
       }
       if (inputString[9] == '1') //减速
       {
@@ -310,7 +310,7 @@ void Bluetooth(void)
         {
           control = 100;
         }
-        Serial.print("reduce\r\n");
+        //Serial.print("reduce\r\n");
       }
 
       //返回状态
