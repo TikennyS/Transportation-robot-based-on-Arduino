@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -83,21 +84,7 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             Log.e(TAG, "ON RESUME: Exception during write.", e);
                         }
-                        byte[] msgBufferReceive = new byte[50];
-                        int bytes = 0;
-                        String receivemessage;
-                        try {
-                            inputStream=btSocket.getInputStream();
-                            bytes=inputStream.read(msgBufferReceive);
-                            receivemessage=new String(msgBufferReceive,0,bytes,"UTF8");
-                            if(receivemessage.indexOf("c")>=2)
-                            {
-                                receivemessage=receivemessage.substring(receivemessage.indexOf("c")-2,receivemessage.indexOf("c"));
-                                Log.e("接收的数据",receivemessage);
-                            }
-                        } catch (IOException e) {
-                            Log.e(TAG, "ON RESUME: Input stream Read failed.", e);
-                        }
+
                         break;
 
                     case MotionEvent.ACTION_UP:  //松开了前进按钮，与前面类似，只是指令不同。
@@ -119,19 +106,7 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             Log.e(TAG, "ON RESUME: Exception during write.", e);
                         }
-                        msgBufferReceive = new byte[50];
-                        try {
-                            inputStream=btSocket.getInputStream();
-                            bytes=inputStream.read(msgBufferReceive);
-                            receivemessage=new String(msgBufferReceive,0,bytes,"UTF8");
-                            if(receivemessage.indexOf("c")>=2)
-                            {
-                                receivemessage=receivemessage.substring(receivemessage.indexOf("c")-2,receivemessage.indexOf("c"));
-                                Log.e("接收的数据",receivemessage);
-                            }
-                        } catch (IOException e) {
-                            Log.e(TAG, "ON RESUME: Input stream Read failed.", e);
-                        }
+
                         break;
                 }
 
@@ -416,6 +391,30 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+
+        final Handler handler=new Handler();
+        Runnable runnable=new Runnable() {
+            @Override
+            public void run() {
+                byte[] msgBufferReceive = new byte[50];
+                int bytes = 0;
+                String receivemessage;
+                try {
+                    inputStream=btSocket.getInputStream();
+                    bytes=inputStream.read(msgBufferReceive);
+                    receivemessage=new String(msgBufferReceive,0,bytes,"UTF8");
+                    if(receivemessage.indexOf("c")>=2)
+                    {
+                        receivemessage=receivemessage.substring(receivemessage.indexOf("c")-2,receivemessage.indexOf("c"));
+                        Log.e("接收的数据",receivemessage);
+                    }
+                } catch (IOException e) {
+                    Log.e(TAG, "ON RESUME: Input stream Read failed.", e);
+                }
+                handler.postDelayed(this,1000);
+            }
+        };
+        handler.postDelayed(runnable,1000);
 
 
         if (D)

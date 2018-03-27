@@ -15,72 +15,124 @@
             android:id="@+id/btnNormal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="#B9C5D1"
             android:layout_weight="1"
-            android:text="控制模式" />
+            android:text="控制模式"
+            android:textSize="16dp"/>
 
         <Button
             android:id="@+id/btnTrack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="#B9C5D1"
             android:layout_weight="1"
-            android:text="巡线模式" />
+            android:text="巡线模式"
+            android:textSize="16dp"/>
 
         <Button
             android:id="@+id/btnFollow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="#B9C5D1"
             android:layout_weight="1"
-            android:text="跟随模式" />
+            android:text="跟随模式"
+            android:textSize="16dp"/>
     </LinearLayout>
 
+        <Button
+            android:id="@+id/btnF"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:background="@drawable/button_up"
+            android:textSize="20dp"
+            android:layout_x="130px"
+            android:layout_y="262px"
+            >
+        </Button>
+        <Button
+            android:id="@+id/btnL"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:background="@drawable/button_left"
+            android:textSize="20dp"
+            android:layout_x="20px"
+            android:layout_y="352px"
+            >
+        </Button>
+        <Button
+            android:id="@+id/btnR"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:background="@drawable/button_right"
+            android:textSize="20dp"
+            android:layout_x="240px"
+            android:layout_y="352px"
+            >
+        </Button>
+        <Button
+            android:id="@+id/btnB"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:background="@drawable/button_down"
+            android:textSize="20dp"
+            android:layout_x="130px"
+            android:layout_y="442px"
+            >
+        </Button>
+        <Button
+            android:id="@+id/btnS"
+            android:layout_width="100px"
+            android:layout_height="100px"
+            android:background="@drawable/button_stop"
+            android:textSize="20dp"
+            android:layout_x="130px"
+            android:layout_y="352px"
+            >
+        </Button>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="400px"
+        android:layout_y="260px"
+        android:text="障碍物距离:"
+        android:textSize="16dp"/>
+    <EditText
+        android:id="@+id/txt_distance"
+        android:layout_width="200px"
+        android:layout_height="wrap_content"
+        android:layout_x="600px"
+        android:layout_y="230px"
+        android:hint="30"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="800px"
+        android:layout_y="260px"
+        android:text="CM"
+        android:textSize="16dp"/>
+
     <Button
-        android:id="@+id/btnF"
-        android:layout_width="100px"
-        android:layout_height="100px"
-        android:text="↑"
-        android:textSize="20dp"
-        android:layout_x="130px"
-        android:layout_y="262px"
-        >
-    </Button>
+        android:id="@+id/btn_accelerate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="400px"
+        android:layout_y="350px"
+        android:background="#B9C5D1"
+        android:text="加速"/>
     <Button
-        android:id="@+id/btnL"
-        android:layout_width="100px"
-        android:layout_height="100px"
-        android:text="←"
-        android:textSize="20dp"
-        android:layout_x="20px"
-        android:layout_y="352px"
-        >
-    </Button>
+        android:id="@+id/btn_deceleration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="600px"
+        android:layout_y="350px"
+        android:background="#B9C5D1"
+        android:text="减速"/>
     <Button
-        android:id="@+id/btnR"
-        android:layout_width="100px"
-        android:layout_height="100px"
-        android:text="→"
-        android:textSize="20dp"
-        android:layout_x="240px"
-        android:layout_y="352px"
-        >
-    </Button>
-    <Button
-        android:id="@+id/btnB"
-        android:layout_width="100px"
-        android:layout_height="100px"
-        android:text="↓"
-        android:textSize="20dp"
-        android:layout_x="130px"
-        android:layout_y="442px"
-        >
-    </Button>
-    <Button
-        android:id="@+id/btnS"
-        android:layout_width="100px"
-        android:layout_height="100px"
-        android:text="●"
-        android:textSize="20dp"
-        android:layout_x="130px"
-        android:layout_y="352px"
-        >
-    </Button>
+        android:id="@+id/btn_turnaround"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="800px"
+        android:layout_y="350px"
+        android:background="#B9C5D1"
+        android:text="掉头"/>
 </AbsoluteLayout>
