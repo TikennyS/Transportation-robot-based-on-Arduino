@@ -1,6 +1,3 @@
-//============================亚博智能========================================
-//  智能小车出厂综合实验
-//=============================================================================
 #include "./IRremote.h"
 
 //红外遥控
@@ -180,6 +177,7 @@ void spin_left()         //左转(左轮后退，右轮前进)
   digitalWrite(Left_motor_go, LOW);  //左轮后退
   digitalWrite(Left_motor_back, HIGH);
   analogWrite(Left_motor_back, control); //PWM比例0~255调速
+  delay(1000);
 
 }
 
@@ -279,14 +277,14 @@ void Bluetooth(void)
       {
         spin_left();
         //Serial.print("revolve\r\n");
-        delay(2000);//延时2ms
+        //delay(2000);//延时
         brake();
       }
       else if (inputString[3] == '2') //旋转
       {
         spin_right();
         //Serial.print("revolve\r\n");
-        delay(2000);//延时2ms
+        //delay(2000);//延时2ms
         brake();
       }
       if (inputString[5] == '1') //鸣笛
@@ -542,7 +540,7 @@ void loop()
     }
   }
   Distance_test();
-  if(Distance<20)
+  if(Distance<20&&g_carstate!=enBACK&&g_carstate!=enTLEFT)
   g_carstate=enSTOP;
   CarControl();
 
@@ -570,6 +568,5 @@ void serialEvent()
     }
   }
 }
-
 
 

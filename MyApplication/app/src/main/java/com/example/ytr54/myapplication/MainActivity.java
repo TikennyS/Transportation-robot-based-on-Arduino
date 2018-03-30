@@ -5,12 +5,14 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -35,21 +37,94 @@ public class MainActivity extends AppCompatActivity {
     Button mButtonL;
     Button mButtonR;
     Button mButtonS;
+    Button mButtonSpin;
 
     Button mButtonNormal;
     Button mButtonTrack;
     Button mButtonFollow;
 
+    Button mButtonAcc;
+    Button mButtondec;
+
+    RadioButton mRadioButtonH;
+    RadioButton mRadioButtonM;
+    RadioButton mRadioButtonL;
+    RadioGroup mRadioGroup;
+
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
 
     private static String address = "98:D3:31:FC:A6:B9"; // <==要连接的蓝牙设备MAC地址
+    TextView distance;
+
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //解析
+        distance=(TextView)findViewById(R.id.txt_distance);
+
+        //handler.postDelayed(runnable,500);
+
+        mRadioButtonH=findViewById(R.id.radioButtonH);
+        mRadioButtonM=findViewById(R.id.radioButtonM);
+        mRadioButtonL=findViewById(R.id.radioButtonL);
+        mRadioGroup=findViewById(R.id.radioGroup);
+
+        mRadioButtonH.setClickable(false);
+        mRadioButtonM.setClickable(false);
+        mRadioButtonL.setClickable(false);
+//加速
+        mButtonAcc=findViewById(R.id.btn_accelerate);
+        mButtonAcc.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mRadioButtonL.isChecked())
+                    mRadioButtonM.setChecked(true);
+                else if(mRadioButtonM.isChecked())
+                    mRadioButtonH.setChecked(true);
+                try {
+                    outStream = btSocket.getOutputStream();
+
+                } catch (IOException e) {
+                    Log.e(TAG, "ON RESUME: Output stream creation failed.", e);
+                }
+                String message = "$0,0,0,1,0,0,0,0,0,0,0,0,4200#";
+                byte[] msgBuffer = message.getBytes();
+                try {
+                    outStream.write(msgBuffer);
+
+                } catch (IOException e) {
+                    Log.e(TAG, "ON RESUME: Exception during write.", e);
+                }
+            }
+        });
+//减速
+        mButtondec=findViewById(R.id.btn_deceleration);
+        mButtondec.setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mRadioButtonH.isChecked())
+                    mRadioButtonM.setChecked(true);
+                else if(mRadioButtonM.isChecked())
+                    mRadioButtonL.setChecked(true);
+                try {
+                    outStream = btSocket.getOutputStream();
+
+                } catch (IOException e) {
+                    Log.e(TAG, "ON RESUME: Output stream creation failed.", e);
+                }
+                String message = "$0,0,0,0,1,0,0,0,0,0,0,0,4200#";
+                byte[] msgBuffer = message.getBytes();
+                try {
+                    outStream.write(msgBuffer);
+
+                } catch (IOException e) {
+                    Log.e(TAG, "ON RESUME: Exception during write.", e);
+                }
+            }
+        });
+
 
 
 
@@ -85,6 +160,11 @@ public class MainActivity extends AppCompatActivity {
                             Log.e(TAG, "ON RESUME: Exception during write.", e);
                         }
 
+
+
+
+                        inputStreamtostring();
+
                         break;
 
                     case MotionEvent.ACTION_UP:  //松开了前进按钮，与前面类似，只是指令不同。
@@ -92,7 +172,7 @@ public class MainActivity extends AppCompatActivity {
                             outStream = btSocket.getOutputStream();
 
                         } catch (IOException e) {
-                            Log.e(TAG, "ON RESUME: Output stream creation failed.", e);
+                            Log.e(TAG,  "ON RESUME: Output stream creation failed.", e);
                         }
 
 
@@ -107,8 +187,11 @@ public class MainActivity extends AppCompatActivity {
                             Log.e(TAG, "ON RESUME: Exception during write.", e);
                         }
 
+                        inputStreamtostring();
+
                         break;
                 }
+
 
                 return false;
             }
@@ -147,6 +230,8 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             Log.e(TAG, "ON RESUME: Exception during write.", e);
                         }
+
+                        inputStreamtostring();
                         break;
 
                     case MotionEvent.ACTION_UP:
@@ -168,6 +253,8 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             Log.e(TAG, "ON RESUME: Exception during write.", e);
                         }
+
+                        inputStreamtostring();
                         break;
                 }
 
@@ -207,6 +294,8 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             Log.e(TAG, "ON RESUME: Exception during write.", e);
                         }
+
+                        inputStreamtostring();
                         break;
 
                     case MotionEvent.ACTION_UP:
@@ -228,6 +317,8 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             Log.e(TAG, "ON RESUME: Exception during write.", e);
                         }
+
+                        inputStreamtostring();
                         break;
                 }
 
@@ -266,6 +357,8 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             Log.e(TAG, "ON RESUME: Exception during write.", e);
                         }
+
+                        inputStreamtostring();
                         break;
 
                     case MotionEvent.ACTION_UP:
@@ -287,6 +380,8 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             Log.e(TAG, "ON RESUME: Exception during write.", e);
                         }
+
+                        inputStreamtostring();
                         break;
                 }
 
@@ -391,30 +486,73 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+/*$0,1,0,0,0,0,0,0,0,0,0,0,4200#*/
+        mButtonSpin=findViewById(R.id.btn_turnaround);
+        mButtonSpin.setOnTouchListener(new Button.OnTouchListener(){
 
-        final Handler handler=new Handler();
-        Runnable runnable=new Runnable() {
             @Override
-            public void run() {
-                byte[] msgBufferReceive = new byte[50];
-                int bytes = 0;
-                String receivemessage;
-                try {
-                    inputStream=btSocket.getInputStream();
-                    bytes=inputStream.read(msgBufferReceive);
-                    receivemessage=new String(msgBufferReceive,0,bytes,"UTF8");
-                    if(receivemessage.indexOf("c")>=2)
-                    {
-                        receivemessage=receivemessage.substring(receivemessage.indexOf("c")-2,receivemessage.indexOf("c"));
-                        Log.e("接收的数据",receivemessage);
-                    }
-                } catch (IOException e) {
-                    Log.e(TAG, "ON RESUME: Input stream Read failed.", e);
+            public boolean onTouch(View v, MotionEvent event) {
+// TODO Auto-generated method stub
+                String message;
+                byte[] msgBuffer;
+                int action = event.getAction();
+                switch(action)
+                {
+                    case MotionEvent.ACTION_DOWN:
+                        try {
+                            outStream = btSocket.getOutputStream();
+
+                        } catch (IOException e) {
+                            Log.e(TAG, "ON RESUME: Output stream creation failed.", e);
+                        }
+
+
+                        message = "$0,1,0,0,0,0,0,0,0,0,0,0,4200#";
+
+                        msgBuffer = message.getBytes();
+
+                        try {
+                            outStream.write(msgBuffer);
+
+                        } catch (IOException e) {
+                            Log.e(TAG, "ON RESUME: Exception during write.", e);
+                        }
+
+                        inputStreamtostring();
+                        break;
+
+                    case MotionEvent.ACTION_UP:
+                        try {
+                            outStream = btSocket.getOutputStream();
+
+                        } catch (IOException e) {
+                            Log.e(TAG, "ON RESUME: Output stream creation failed.", e);
+                        }
+
+
+                        message = "$0,0,0,0,0,0,0,0,0,0,0,0,4200#";
+
+                        msgBuffer = message.getBytes();
+
+                        try {
+                            outStream.write(msgBuffer);
+
+                        } catch (IOException e) {
+                            Log.e(TAG, "ON RESUME: Exception during write.", e);
+                        }
+
+                        inputStreamtostring();
+                        break;
                 }
-                handler.postDelayed(this,1000);
+
+                return false;
+
             }
-        };
-        handler.postDelayed(runnable,1000);
+
+
+        });
+
+
 
 
         if (D)
@@ -439,8 +577,29 @@ public class MainActivity extends AppCompatActivity {
         if (D)
             Log.e(TAG, "+++ DONE IN ON CREATE, GOT LOCAL BT ADAPTER +++");
 
-    }
 
+    }
+    public void inputStreamtostring(){
+        byte[] msgBufferReceive = new byte[50];
+        int bytes = 0;
+        String receivemessage;
+        try {
+            inputStream=btSocket.getInputStream();
+            bytes=inputStream.read(msgBufferReceive);
+            receivemessage=new String(msgBufferReceive,0,bytes,"UTF8");
+             Log.e("接收的数据",receivemessage);
+            if(receivemessage.indexOf("c")>=2)
+            {
+                receivemessage=receivemessage.substring(receivemessage.indexOf("c")-2,receivemessage.indexOf("c"));
+                //Log.e("接收的数据",receivemessage);
+                distance.setText(receivemessage);
+
+            }
+        } catch (IOException e) {
+            Log.e(TAG, "ON RESUME: Input stream Read failed.", e);
+        }
+
+    }
 
     @Override
 
@@ -518,7 +677,7 @@ outStream.write(msgBuffer);
 Log.e(TAG, "ON RESUME: Exception during write.", e);
 }
 */
-
+        //handler.postDelayed(runnable,500);
     }
 
 
@@ -553,6 +712,7 @@ Log.e(TAG, "ON RESUME: Exception during write.", e);
     @Override
 
     public void onStop() {
+
 
         super.onStop();
 
