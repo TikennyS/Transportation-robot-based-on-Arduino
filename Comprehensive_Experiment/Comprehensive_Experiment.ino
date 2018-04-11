@@ -25,7 +25,7 @@ enum {
 //==============================
 //
 //车速控制量 control
-int control = 100;          //PWM控制量
+int control = 150;          //PWM控制量
 #define level1  0x08//速度控制标志位1
 #define level2  0x09//速度控制标志位2
 #define level3  0x0A//速度控制标志位3
@@ -263,7 +263,7 @@ void Bluetooth(void)
       }
     }
     else if (g_modeSelect == 0 && g_AllState == 0) //默认遥控模式
-    {
+    { 
       switch (inputString[1])
       {
         case run_car:   g_carstate = enRUN;  break;
@@ -294,20 +294,17 @@ void Bluetooth(void)
       }
       if (inputString[7] == '1') //加速
       {
-        control += 50;
-        if (control > 255)
-        {
-          control = 255;
-        }
+        if(control==50)
+        control = 150;
+        if(control==150)
+        control=255;
         //Serial.print("expedite\r\n");
       }
       if (inputString[9] == '1') //减速
-      {
-        control -= 50;
-        if (control < 50)
-        {
-          control = 100;
-        }
+      { if(control==255)
+        control = 150;
+        if(control==150)
+        control=50;
         //Serial.print("reduce\r\n");
       }
 
@@ -379,10 +376,6 @@ void IR_Deal()
   if (irrecv.decode(&results)) 
   {
     //Serial.println(results.value, HEX);
-
-    //if (((results.value >> 16) & 0x0000ffff) == 0x00ff)
-    //{
-    //printf("$AR,HSX,%08lX#\n", results.value);
     //根据不同值来执行不同操作
     //  00FFA25D  开关
     //  00FF02FD   +
@@ -407,8 +400,6 @@ void IR_Deal()
     {
       case 0x00FFA25D: g_carstate = enSTOP; g_AllState = 0; g_modeSelect = 0; BeepOnOffMode() ;break;
       case 0x00FFA857: g_carstate = enSTOP; g_AllState = 0; BeepOnOffMode() ; break; // PLAY
-      //case 0x00FFE01F: g_AllState = 1; g_modeSelect--; if (g_modeSelect == -1) g_modeSelect = 3; break;
-      //case 0x00FF906F: g_AllState = 1; g_modeSelect++; if (g_modeSelect == 4) g_modeSelect = 0;  break;
       case 0x00FFE21D: g_AllState = 1; g_modeSelect = 0;  ModeBEEP(g_modeSelect); break; // MENU 遥控模式  1
       case 0x00FFC23D: g_AllState = 1; g_modeSelect = 2;  ModeBEEP(g_modeSelect); break; // NEXT 避障模式  2
       case 0x00FF906F: g_AllState = 1; g_modeSelect = 1;  ModeBEEP(g_modeSelect); break; // Back 巡线模式  3
@@ -421,8 +412,8 @@ void IR_Deal()
       switch (results.value)
       {
         
-        case 0x00FF02FD: control += 50; if (control > 255) control = 255; break;
-        case 0x00FF9867: control -= 50; if (control < 50) control = 100; break;
+        case 0x00FF02FD: if(control==50) control = 150; if(control==150) control=255; break;
+        case 0x00FF9867: if(control==255) control = 150; if(control==150) control=50; break;
 
         case 0x00FF6897: whistle(); break;
         case 0x00FF18E7:  g_carstate = enRUN; break;
@@ -432,7 +423,7 @@ void IR_Deal()
         case 0x00FF4AB5:  g_carstate = enBACK; break;
         case 0x00FF42BD:  g_carstate = enTLEFT; break;
         case 0x00FF52AD:  g_carstate = enTRIGHT; break;
-        default: break; //保持原来状态
+        default: break; 
 
       }
      
@@ -474,16 +465,15 @@ void BeepOnOffMode()
 void track()
 { 
   
-  //有信号为LOW  没有信号为HIGH
-  SR = digitalRead(SensorRight);//有信号表明在白色区域，车子底板上L3亮；没信号表明压在黑线上，车子底板上L3灭
-  SL = digitalRead(SensorLeft);//有信号表明在白色区域，车子底板上L2亮；没信号表明压在黑线上，车子底板上L2灭
-  if (SL == LOW && SR == LOW) //当两边RPR220同时检测白色
-  g_carstate = enSTOP;   //调用停止函数
-  else if (SL == LOW & SR == HIGH)// 左循迹红外传感器,检测到信号，车子向右偏离轨道，向左转
+  SR = digitalRead(SensorRight);
+  SL = digitalRead(SensorLeft);
+  if (SL == LOW && SR == LOW) 
+  g_carstate = enSTOP; 
+  else if (SL == LOW & SR == HIGH)
   g_carstate = enRIGHT;
-  else if (SR == LOW & SL ==  HIGH) // 右循迹红外传感器,检测到信号，车子向左偏离轨道，向右转
+  else if (SR == LOW & SL ==  HIGH)
   g_carstate = enLEFT;
-  else // 双探头都是检测到了黑线的情况下, 前进
+  else 
   g_carstate = enRUN;
     
 }
@@ -501,16 +491,15 @@ void ultrason_obstacle_avoiding()
 //跟随模式
 void Infrared_follow()
 {
-  //有信号为LOW  没有信号为HIGH
   SR_2 = digitalRead(SensorRight_2);
   SL_2 = digitalRead(SensorLeft_2);
   if (SL_2 == LOW && SR_2 == LOW)
-    g_carstate = enRUN;   //调用前进函数
-  else if (SL_2 == HIGH & SR_2 == LOW)// 右边探测到有障碍物，有信号返回，向右转
+    g_carstate = enRUN;   
+  else if (SL_2 == HIGH & SR_2 == LOW)
     g_carstate = enRIGHT;
-  else if (SR_2 == HIGH & SL_2 == LOW) //左边探测到有障碍物，有信号返回，向左转
+  else if (SR_2 == HIGH & SL_2 == LOW)
     g_carstate = enLEFT;
-  else // 没有障碍物，停
+  else 
     g_carstate = enSTOP;
 }
 
